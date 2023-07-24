@@ -4,12 +4,13 @@
 // AutoRouterGenerator
 // **************************************************************************
 
-// ignore_for_file: type=lint, unused_element
+// ignore_for_file: type=lint
 // coverage:ignore-file
 
 part of 'router.dart';
 
 abstract class _$AppRouter extends RootStackRouter {
+  // ignore: unused_element
   _$AppRouter({super.navigatorKey});
 
   @override
@@ -27,7 +28,11 @@ abstract class _$AppRouter extends RootStackRouter {
           orElse: () => const DetailsRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: DetailsPage(key: args.key),
+        child: DetailsPage(
+          key: args.key,
+          title: args.title,
+          url: args.url,
+        ),
       );
     },
     WelcomeRoute.name: (routeData) {
@@ -96,10 +101,16 @@ class SignInRouteArgs {
 class DetailsRoute extends PageRouteInfo<DetailsRouteArgs> {
   DetailsRoute({
     Key? key,
+    String? title,
+    String? url,
     List<PageRouteInfo>? children,
   }) : super(
           DetailsRoute.name,
-          args: DetailsRouteArgs(key: key),
+          args: DetailsRouteArgs(
+            key: key,
+            title: title,
+            url: url,
+          ),
           initialChildren: children,
         );
 
@@ -110,13 +121,21 @@ class DetailsRoute extends PageRouteInfo<DetailsRouteArgs> {
 }
 
 class DetailsRouteArgs {
-  const DetailsRouteArgs({this.key});
+  const DetailsRouteArgs({
+    this.key,
+    this.title,
+    this.url,
+  });
 
   final Key? key;
 
+  final String? title;
+
+  final String? url;
+
   @override
   String toString() {
-    return 'DetailsRouteArgs{key: $key}';
+    return 'DetailsRouteArgs{key: $key, title: $title, url: $url}';
   }
 }
 

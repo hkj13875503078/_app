@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:news_app/common/provider/provider.dart';
+import 'package:news_app/common/router/router.dart';
 import 'package:news_app/global.dart';
 import 'package:news_app/pages/index/index.dart';
 import 'package:news_app/routes.dart';
@@ -28,14 +29,13 @@ void main() => Global.init().then((e) => runApp(
     ));
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
+  final _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Material App',
-      routes: staticRoutes,
-      home: IndexPage(),
+    return MaterialApp.router(
+      routerConfig: _appRouter.config(),
     );
   }
 }

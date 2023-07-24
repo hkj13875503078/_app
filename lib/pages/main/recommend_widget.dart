@@ -1,23 +1,33 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unused_local_variable, avoid_print
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/common/entitys/entitys.dart';
+import 'package:news_app/common/router/router.dart';
 import 'package:news_app/common/utils/utils.dart';
 import 'package:news_app/common/values/values.dart';
 import 'package:news_app/common/widgets/widgets.dart';
 
 // 推荐阅读
-Widget recommendWidget(NewsRecommendResponseEntity newsRecommend) {
+Widget recommendWidget(
+    NewsRecommendResponseEntity newsRecommend, BuildContext context) {
   return Container(
     margin: EdgeInsets.all(duSetWidth(20)),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         // 图
-        imageCached(
-          newsRecommend.thumbnail.toString(),
-          width: duSetWidth(335),
-          height: duSetHeight(290),
+        InkWell(
+          onTap: () async {
+            dynamic result = await context.router.push(DetailsRoute(
+                title: newsRecommend.title, url: newsRecommend.url));
+            print(result);
+          },
+          child: imageCached(
+            newsRecommend.thumbnail.toString(),
+            width: duSetWidth(335),
+            height: duSetHeight(290),
+          ),
         ),
         // 作者
         Container(

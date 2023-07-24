@@ -7,7 +7,9 @@ import 'package:news_app/common/widgets/widgets.dart';
 
 @RoutePage()
 class DetailsPage extends StatefulWidget {
-  DetailsPage({Key? key}) : super(key: key);
+  final String? title;
+  final String? url;
+  DetailsPage({Key? key, this.title, this.url}) : super(key: key);
 
   @override
   _DetailsPageState createState() => _DetailsPageState();
@@ -53,8 +55,24 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildPageView(),
+      //appBar: _buildAppBar(),
+      appBar: AppBar(
+        title: Text('aaaaaaaaaaaaaa'),
+      ),
+      //body: _buildPageView(),
+      body: Container(
+        child: Column(
+          children: [
+            Text('data ${widget.title} ${widget.url}'),
+            MaterialButton(
+              onPressed: () {
+                context.router.pop('xxxxxxxxx');
+              },
+              child: Text('sssss'),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

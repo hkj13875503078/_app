@@ -1,7 +1,8 @@
-// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, sort_child_properties_last
+// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, sort_child_properties_last, unnecessary_cast
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/common/router/router.dart';
 import 'package:news_app/common/utils/utils.dart';
 import 'package:news_app/common/values/values.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -98,10 +99,7 @@ class WelcomePage extends StatelessWidget {
           borderRadius: Radii.k6pxRadius,
         ),
         onPressed: () {
-          Navigator.pushNamed(
-            context,
-            "/sign-in",
-          );
+          context.router.push(SignInRoute() as PageRouteInfo);
         },
       ),
     );

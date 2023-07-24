@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/common/apis/apis.dart';
 import 'package:news_app/common/entitys/entitys.dart';
+import 'package:news_app/common/router/router.dart';
 import 'package:news_app/common/utils/utils.dart';
 import 'package:news_app/common/values/values.dart';
 import 'package:news_app/common/widgets/widgets.dart';
@@ -54,10 +55,11 @@ class _SignInPageState extends State<SignInPage> {
     );
     Global.saveProfile(userProfile);
 
-    Navigator.pushNamed(
-      context,
-      "/app",
-    );
+    // Navigator.pushNamed(
+    //   context,
+    //   "/app",
+    // );
+    context.router.push(ApplicationRoute());
   }
 
   ///////////////////////////////

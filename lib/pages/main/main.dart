@@ -156,7 +156,7 @@ class _MainPageState extends State<MainPage> {
   Widget _buildRecommend() {
     return _newsRecommend == null // 数据没到位，可以用骨架图展示
         ? Container()
-        : recommendWidget(_newsRecommend!);
+        : recommendWidget(_newsRecommend!, context);
   }
 
   // 频道

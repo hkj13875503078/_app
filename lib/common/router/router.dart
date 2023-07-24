@@ -1,7 +1,8 @@
-// ignore_for_file: override_on_non_overriding_member, prefer_const_constructors
+// ignore_for_file: override_on_non_overriding_member, prefer_const_constructors, body_might_complete_normally_nullable
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
+import 'package:news_app/common/router/auth_grard.dart';
 import 'package:news_app/pages/application/application.dart';
 import 'package:news_app/pages/details/details.dart';
 import 'package:news_app/pages/index/index.dart';
@@ -10,21 +11,15 @@ import 'package:news_app/pages/sign_up/sign_up.dart';
 import 'package:news_app/pages/welcome/welcome.dart';
 part 'router.gr.dart';
 
-// @MaterialRouter(
-//   replaceInRouteName: 'Page,Route',
-//   routes: <AutoRoute>[
-//     AutoRoute(page: IndexPage, initial: true),
-//     AutoRoute(page: WelcomePage),
-//     AutoRoute(page: SignInPage),
-//     AutoRoute(page: SignUpPage),
-//     AutoRoute(page: ApplicationPage),
-//     AutoRoute(page: DetailsPage),
-//   ],
-// )
-// class AppRouter {}
+Widget zoomInTransition(BuildContext context, Animation<double> animation,
+    Animation<double> secondaryAnimation, Widget child) {
+  // you get an animation object and a widget
+  // make your own transition
+  return ScaleTransition(scale: animation, child: child);
+}
 
-@AutoRouterConfig(replaceInRouteName: 'Page,Route')
-class AppRouter {
+@AutoRouterConfig()
+class AppRouter extends _$AppRouter {
   @override
   RouteType get defaultRouteType =>
       RouteType.material(); //.cupertino, .adaptive ..etc
@@ -37,6 +32,10 @@ class AppRouter {
         AutoRoute(page: SignInRoute.page),
         AutoRoute(page: SignUpRoute.page),
         AutoRoute(page: ApplicationRoute.page),
-        AutoRoute(page: DetailsRoute.page),
+        CustomRoute(
+          page: DetailsRoute.page,
+          guards: [AuthGuard()],
+          transitionsBuilder: zoomInTransition,
+        )
       ];
 }
