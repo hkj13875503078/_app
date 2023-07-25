@@ -2,6 +2,7 @@
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
+import 'package:news_app/common/entitys/entitys.dart';
 import 'package:news_app/common/router/auth_grard.dart';
 import 'package:news_app/pages/application/application.dart';
 import 'package:news_app/pages/details/details.dart';

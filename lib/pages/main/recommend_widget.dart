@@ -9,8 +9,7 @@ import 'package:news_app/common/values/values.dart';
 import 'package:news_app/common/widgets/widgets.dart';
 
 // 推荐阅读
-Widget recommendWidget(
-    NewsRecommendResponseEntity newsRecommend, BuildContext context) {
+Widget recommendWidget(NewsItem item, BuildContext context) {
   return Container(
     margin: EdgeInsets.all(duSetWidth(20)),
     child: Column(
@@ -19,12 +18,12 @@ Widget recommendWidget(
         // 图
         InkWell(
           onTap: () async {
-            dynamic result = await context.router.push(DetailsRoute(
-                title: newsRecommend.title, url: newsRecommend.url));
+            dynamic result =
+                await context.router.push(DetailsRoute(item: item));
             print(result);
           },
           child: imageCached(
-            newsRecommend.thumbnail.toString(),
+            item.thumbnail.toString(),
             width: duSetWidth(335),
             height: duSetHeight(290),
           ),
@@ -33,7 +32,7 @@ Widget recommendWidget(
         Container(
           margin: EdgeInsets.only(top: duSetHeight(14)),
           child: Text(
-            newsRecommend.author.toString(),
+            item.author.toString(),
             style: TextStyle(
               fontFamily: 'Avenir',
               fontWeight: FontWeight.normal,
@@ -43,19 +42,26 @@ Widget recommendWidget(
           ),
         ),
         // 标题
-        Container(
-          margin: EdgeInsets.only(top: duSetHeight(10)),
-          child: Text(
-            newsRecommend.title.toString(),
-            style: TextStyle(
-              fontFamily: 'Montserrat',
-              fontWeight: FontWeight.w600,
-              color: AppColors.primaryText,
-              fontSize: duSetFontSize(24),
-              height: 1,
+        // 标题
+        InkWell(
+          onTap: () async {
+            context.router.push(DetailsRoute(item: item));
+          },
+          child: Container(
+            margin: EdgeInsets.only(top: duSetHeight(10)),
+            child: Text(
+              item.title.toString(),
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w600,
+                color: AppColors.primaryText,
+                fontSize: duSetFontSize(24),
+                height: 1,
+              ),
             ),
           ),
         ),
+
         // 一行 3 列
         Container(
           margin: EdgeInsets.only(top: duSetHeight(10)),
@@ -68,7 +74,7 @@ Widget recommendWidget(
                   maxWidth: 120,
                 ),
                 child: Text(
-                  newsRecommend.category.toString(),
+                  item.category.toString(),
                   style: TextStyle(
                     fontFamily: 'Avenir',
                     fontWeight: FontWeight.normal,
@@ -89,7 +95,7 @@ Widget recommendWidget(
                   maxWidth: 120,
                 ),
                 child: Text(
-                  '• ${duTimeLineFormat(newsRecommend.addtime)}',
+                  '• ${duTimeLineFormat(item.addtime)}',
                   //'• 无',
                   style: TextStyle(
                     fontFamily: 'Avenir',

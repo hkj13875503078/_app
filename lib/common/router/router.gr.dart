@@ -30,8 +30,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: DetailsPage(
           key: args.key,
-          title: args.title,
-          url: args.url,
+          item: args.item,
         ),
       );
     },
@@ -101,15 +100,13 @@ class SignInRouteArgs {
 class DetailsRoute extends PageRouteInfo<DetailsRouteArgs> {
   DetailsRoute({
     Key? key,
-    String? title,
-    String? url,
+    NewsItem? item,
     List<PageRouteInfo>? children,
   }) : super(
           DetailsRoute.name,
           args: DetailsRouteArgs(
             key: key,
-            title: title,
-            url: url,
+            item: item,
           ),
           initialChildren: children,
         );
@@ -123,19 +120,16 @@ class DetailsRoute extends PageRouteInfo<DetailsRouteArgs> {
 class DetailsRouteArgs {
   const DetailsRouteArgs({
     this.key,
-    this.title,
-    this.url,
+    this.item,
   });
 
   final Key? key;
 
-  final String? title;
-
-  final String? url;
+  final NewsItem? item;
 
   @override
   String toString() {
-    return 'DetailsRouteArgs{key: $key, title: $title, url: $url}';
+    return 'DetailsRouteArgs{key: $key, item: $item}';
   }
 }
 

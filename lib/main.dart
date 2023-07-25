@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:news_app/common/provider/provider.dart';
 import 'package:news_app/common/router/router.dart';
 import 'package:news_app/global.dart';
-import 'package:news_app/pages/index/index.dart';
-import 'package:news_app/routes.dart';
 import 'package:provider/provider.dart';
 
 void main() => Global.init().then((e) => runApp(

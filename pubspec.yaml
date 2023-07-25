@@ -46,7 +46,14 @@ dependencies:
 
   #路由器
   auto_route: ^7.7.1
-  
+
+
+  # loading
+  loading_animations: ^2.1.0
+
+  # webView
+  webview_flutter: ^4.2.2
+
 
 dev_dependencies:
   flutter_test:
