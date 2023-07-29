@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, prefer_const_constructors_in_immutables, prefer_final_fields, sized_box_for_whitespace, unused_field, unused_element, unnecessary_null_comparison, avoid_print, unused_label
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:news_app/common/entitys/news.dart';
+import 'package:news_app/common/utils/utils.dart';
 import 'package:news_app/common/values/values.dart';
+import 'package:news_app/common/widgets/widgets.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 @RoutePage()
@@ -17,6 +20,7 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   double _webViewHeight = 200;
+  bool _isPageFinished = false;
   final WebViewController controller = WebViewController();
 
   @override
@@ -31,17 +35,31 @@ class _DetailsPageState extends State<DetailsPage> {
           onProgress: (int progress) {
             // Update loading bar.
           },
-          onPageStarted: (String url) {},
+          onPageStarted: (String url) {
+            // Timer(Duration(seconds: 1), () {
+            //   setState(() {
+            //     _isPageFinished = true;
+            //   });
+            //   _removeWebViewAd();
+            //   _getWebViewHeight();
+            // });
+          },
           onPageFinished: (String url) {
+            //_getWebViewDevicePixelRatio();
             _getWebViewHeight();
+            setState(() {
+              _isPageFinished = true;
+            });
           },
           onWebResourceError: (WebResourceError error) {},
-          // onNavigationRequest: (NavigationRequest request) {
-          //   if (request.url.startsWith('https://www.youtube.com/')) {
-          //     return NavigationDecision.prevent;
-          //   }
-          //   return NavigationDecision.navigate;
-          // },
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url !=
+                '$SERVER_API_URL/news/content/${widget.item!.id}') {
+              toastInfo(msg: request.url);
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
         ),
       )
       ..addJavaScriptChannel(
@@ -57,22 +75,163 @@ class _DetailsPageState extends State<DetailsPage> {
         },
       )
       ..loadRequest(
+          //Uri.parse('https://baijiahao.baidu.com/s?id=1772367339902736421'));
           Uri.parse('$SERVER_API_URL/news/content/${widget.item!.id}'));
   }
 
   // 顶部导航
   PreferredSizeWidget _buildAppBar() {
-    return AppBar();
+    return transparentAppBar(
+        context: context,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: AppColors.primaryText,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.bookmark_border,
+              color: AppColors.primaryText,
+            ),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.share,
+              color: AppColors.primaryText,
+            ),
+            onPressed: () {
+              Share.share('${widget.item!.title} ${widget.item!.url}');
+            },
+          ),
+        ]);
   }
 
 // 页标题
   Widget _buildPageTitle() {
-    return Container();
+    return Container(
+      margin: EdgeInsets.all(duSetWidth(10)),
+      child: Row(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              // 标题
+              Text(
+                widget.item!.category!,
+                style: TextStyle(
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.normal,
+                  fontSize: duSetFontSize(30),
+                  color: AppColors.thirdElement,
+                ),
+              ),
+              // 作者
+              Text(
+                widget.item!.author!,
+                style: TextStyle(
+                  fontFamily: "Avenir",
+                  fontWeight: FontWeight.normal,
+                  fontSize: duSetFontSize(14),
+                  color: AppColors.thirdElementText,
+                ),
+              ),
+            ],
+          ),
+          Spacer(),
+          // 标志
+          CircleAvatar(
+            //头像半径
+            radius: duSetWidth(22),
+            backgroundImage: AssetImage("assets/images/channel-fox.png"),
+          ),
+        ],
+      ),
+    );
   }
 
 // 页头部
   Widget _buildPageHeader() {
-    return Container();
+    return Container(
+      margin: EdgeInsets.all(duSetWidth(10)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          // 图
+          imageCached(
+            widget.item!.thumbnail!,
+            width: duSetWidth(335),
+            height: duSetHeight(290),
+          ),
+          // 标题
+          Container(
+            margin: EdgeInsets.only(top: duSetHeight(10)),
+            child: Text(
+              widget.item!.title!,
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w600,
+                color: AppColors.primaryText,
+                fontSize: duSetFontSize(24),
+                height: 1,
+              ),
+            ),
+          ),
+          // 一行 3 列
+          Container(
+            margin: EdgeInsets.only(top: duSetHeight(10)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                // 分类
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxWidth: 120,
+                  ),
+                  child: Text(
+                    widget.item!.category!,
+                    style: TextStyle(
+                      fontFamily: 'Avenir',
+                      fontWeight: FontWeight.normal,
+                      color: AppColors.secondaryElementText,
+                      fontSize: duSetFontSize(14),
+                      height: 1,
+                    ),
+                    overflow: TextOverflow.clip,
+                    maxLines: 1,
+                  ),
+                ),
+                // 添加时间
+                Container(
+                  width: duSetWidth(15),
+                ),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxWidth: 120,
+                  ),
+                  child: Text(
+                    '• ${duTimeLineFormat(widget.item!.addtime)}',
+                    style: TextStyle(
+                      fontFamily: 'Avenir',
+                      fontWeight: FontWeight.normal,
+                      color: AppColors.thirdElementText,
+                      fontSize: duSetFontSize(14),
+                      height: 1,
+                    ),
+                    overflow: TextOverflow.clip,
+                    maxLines: 1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
 // web内容
@@ -82,13 +241,6 @@ class _DetailsPageState extends State<DetailsPage> {
       child: WebViewWidget(
         controller: controller,
       ),
-      //     initialUrl: '$SERVER_API_URL/news/content/1', //widget.url,
-      //     javascriptMode: JavascriptMode.unrestricted,
-      //     onWebViewCreated: (WebViewController webViewController) async {
-      //       _controller.complete(webViewController);
-      //     },
-      //     gestureNavigationEnabled: true,
-      //   ),
     );
   }
 
@@ -130,20 +282,38 @@ class _DetailsPageState extends State<DetailsPage> {
         ''');
   }
 
+// 获取web浏览器像素密度
+  _getWebViewDevicePixelRatio() async {
+    await controller.runJavaScript('''
+        try {
+          Invoke.postMessage(window.devicePixelRatio);
+        } catch {}
+        ''');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
+        appBar: _buildAppBar(),
+        body: Stack(
           children: <Widget>[
-            _buildPageTitle(),
-            Divider(height: 1),
-            _buildPageHeader(),
-            _buildWebView(),
+            SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  _buildPageTitle(),
+                  Divider(height: 1),
+                  _buildPageHeader(),
+                  _buildWebView(),
+                ],
+              ),
+            ),
+            _isPageFinished == true
+                ? Container()
+                : Align(
+                    alignment: Alignment.center,
+                    child: LoadingBouncingGrid.square(),
+                  ),
           ],
-        ),
-      ),
-    );
+        ));
   }
 }

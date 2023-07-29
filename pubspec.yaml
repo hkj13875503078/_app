@@ -54,6 +54,16 @@ dependencies:
   # webView
   webview_flutter: ^4.2.2
 
+  # 分享
+  share_plus: ^7.0.2
+
+  # logo图标
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/logo.png"
 
 dev_dependencies:
   flutter_test:
